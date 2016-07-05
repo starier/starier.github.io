@@ -1,0 +1,615 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="简介在本章中，主要介绍了vue项目基于leancloud后台实现用户的注册登录功能，同时也可以实现注册时的短信验证码、第三方注册等功能。
+LeancloudLeancloud入门用户可以首先申请一个leancloud免费帐号，然后新建一个项目，并得到相应的AppID、AppKey，本项目是基于leancloud的javascript平台进行开发的，使用的是leancloud数据存储开发功能，相应的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue+webpack+leancloud基础教程（三）-用户的登录、注册">
+<meta property="og:url" content="http://chicheng.info/2016/05/19/vue-webpack-leancloud-login/index.html">
+<meta property="og:site_name" content="Chicheng's Blog">
+<meta property="og:description" content="简介在本章中，主要介绍了vue项目基于leancloud后台实现用户的注册登录功能，同时也可以实现注册时的短信验证码、第三方注册等功能。
+LeancloudLeancloud入门用户可以首先申请一个leancloud免费帐号，然后新建一个项目，并得到相应的AppID、AppKey，本项目是基于leancloud的javascript平台进行开发的，使用的是leancloud数据存储开发功能，相应的">
+<meta property="og:updated_time" content="2016-05-19T07:21:18.108Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vue+webpack+leancloud基础教程（三）-用户的登录、注册">
+<meta name="twitter:description" content="简介在本章中，主要介绍了vue项目基于leancloud后台实现用户的注册登录功能，同时也可以实现注册时的短信验证码、第三方注册等功能。
+LeancloudLeancloud入门用户可以首先申请一个leancloud免费帐号，然后新建一个项目，并得到相应的AppID、AppKey，本项目是基于leancloud的javascript平台进行开发的，使用的是leancloud数据存储开发功能，相应的">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Vue+webpack+leancloud基础教程（三）-用户的登录、注册 | Chicheng's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?6c68b31c5fe2e25af9b2f230a597b923";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Chicheng's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Vue+webpack+leancloud基础教程（三）-用户的登录、注册
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-19T14:52:35+08:00" content="2016-05-19">
+              2016-05-19
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/19/vue-webpack-leancloud-login/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/19/vue-webpack-leancloud-login/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>在本章中，主要介绍了vue项目基于leancloud后台实现用户的注册登录功能，同时也可以实现注册时的短信验证码、第三方注册等功能。</p>
+<h1 id="Leancloud"><a href="#Leancloud" class="headerlink" title="Leancloud"></a>Leancloud</h1><h2 id="Leancloud入门"><a href="#Leancloud入门" class="headerlink" title="Leancloud入门"></a>Leancloud入门</h2><p>用户可以首先申请一个<a href="https://leancloud.cn/login.html#/signup" target="_blank" rel="external">leancloud免费帐号</a>，然后新建一个项目，并得到相应的AppID、AppKey，本项目是基于leancloud的javascript平台进行开发的，使用的是leancloud数据存储开发功能，相应的<a href="https://leancloud.cn/docs/js_guide.html" target="_blank" rel="external">API接口文档</a></p>
+<h2 id="安装Leancloud-SDK"><a href="#安装Leancloud-SDK" class="headerlink" title="安装Leancloud SDK"></a>安装Leancloud SDK</h2><p>项目安装Leancloud模块，如下</p>
+<blockquote>
+<p>npm install avoscloud-sdk –save-dev</p>
+</blockquote>
+<p>相应的vue使用Leancloud如下：</p>
+<blockquote>
+<p>import AV from ‘avoscloud-sdk’<br>AV.initialize(‘<strong><strong>AppID</strong></strong>‘, ‘<strong><strong>AppKey</strong></strong>‘)</p>
+</blockquote>
+<h1 id="vue-strap"><a href="#vue-strap" class="headerlink" title="vue-strap"></a>vue-strap</h1><h2 id="简介-1"><a href="#简介-1" class="headerlink" title="简介"></a>简介</h2><p>vue-strap主要用于在vue项目中使用bootstrap组件而开发的，在项目的登录注册功能中，主要用于实现提示功能。</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><blockquote>
+<p>npm install –save-dev vue-strap</p>
+</blockquote>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import &#123; alert &#125; from 'vue-strap'</span><br><span class="line"><span class="tag">&lt;<span class="name">alert</span></span><br><span class="line">  <span class="attr">:show.sync</span>=<span class="string">"showError"</span>  // 参数<span class="attr">showError</span>用来表示该提醒是否显示</span><br><span class="line">  <span class="attr">:duration</span>=<span class="string">"3000"</span></span><br><span class="line">  <span class="attr">type</span>=<span class="string">"danger"</span></span><br><span class="line">  <span class="attr">width</span>=<span class="string">"360px"</span></span><br><span class="line">  <span class="attr">placement</span>=<span class="string">"top"</span></span><br><span class="line">  <span class="attr">dismissable</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"icon-info-circled alert-icon-float-left"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>&#123;&#123; errorMsg &#125;&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span>  // errorMsg表示要显示的错误内容</span><br><span class="line"><span class="tag">&lt;/<span class="name">alert</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="用户注册、登录"><a href="#用户注册、登录" class="headerlink" title="用户注册、登录"></a>用户注册、登录</h1><h2 id="页面设计"><a href="#页面设计" class="headerlink" title="页面设计"></a>页面设计</h2><p>页面主要利用了bootstrap的标签页，另外，手机短信验证码功能已经开发完成，但在本项目中并为使用，可参考注释内容实现。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"container"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"row"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"col-md-4 col-md-offset-4 user-center"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">alert</span></span><br><span class="line">          <span class="attr">:show.sync</span>=<span class="string">"showError"</span></span><br><span class="line">          <span class="attr">:duration</span>=<span class="string">"3000"</span></span><br><span class="line">          <span class="attr">type</span>=<span class="string">"danger"</span></span><br><span class="line">          <span class="attr">width</span>=<span class="string">"360px"</span></span><br><span class="line">          <span class="attr">placement</span>=<span class="string">"top"</span></span><br><span class="line">          <span class="attr">dismissable</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"icon-info-circled alert-icon-float-left"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">p</span>&gt;</span>&#123;&#123; errorMsg &#125;&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">alert</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">ul</span> <span class="attr">class</span>=<span class="string">"nav nav-tabs"</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">li</span> <span class="attr">class</span>=<span class="string">"active"</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"#login"</span> <span class="attr">data-toggle</span>=<span class="string">"tab"</span>&gt;</span>用户登录<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"#register"</span> <span class="attr">data-toggle</span>=<span class="string">"tab"</span>&gt;</span>注册<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"tab-content"</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"user-content tab-pane fade in active"</span> <span class="attr">id</span>=<span class="string">"login"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">""</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"form-group"</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">"username"</span>&gt;</span>用户名：<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">class</span>=<span class="string">"form-control"</span> <span class="attr">v-model</span>=<span class="string">"username"</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"form-group"</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">"password"</span>&gt;</span>密码：<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"password"</span> <span class="attr">class</span>=<span class="string">"form-control"</span> <span class="attr">v-model</span>=<span class="string">"password"</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">button</span> <span class="attr">v-on:click</span>=<span class="string">"login"</span> <span class="attr">class</span>=<span class="string">"btn btn-default"</span>&gt;</span>登录<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"user-content tab-pane fade"</span> <span class="attr">id</span>=<span class="string">"register"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">""</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"form-group"</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">"username"</span>&gt;</span>用户名：<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">class</span>=<span class="string">"form-control"</span> <span class="attr">v-model</span>=<span class="string">"registerName"</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"form-group"</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">"password"</span>&gt;</span>密码：<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"password"</span> <span class="attr">class</span>=<span class="string">"form-control"</span> <span class="attr">v-model</span>=<span class="string">"registerPassword"</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"form-group"</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">"password"</span>&gt;</span>密码：<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"password"</span> <span class="attr">class</span>=<span class="string">"form-control"</span> <span class="attr">v-model</span>=<span class="string">"registerRePassword"</span>&gt;</span></span><br><span class="line">              <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">             <span class="comment">&lt;!--  &lt;div class="form-group"&gt;</span><br><span class="line">                &lt;label for="mobile"&gt;手机号：&lt;/label&gt;</span><br><span class="line">                &lt;input type="text" class="form-control" v-model="mobile"&gt;</span><br><span class="line">                &lt;button v-on:click="sendSmsCode" class="btn btn-default"&gt;发送验证码&lt;/button&gt;</span><br><span class="line">              &lt;/div&gt; --&gt;</span></span><br><span class="line">              <span class="comment">&lt;!-- &lt;div class="form-group"&gt;</span><br><span class="line">                &lt;label for="smsCode"&gt;验证码&lt;/label&gt;</span><br><span class="line">                &lt;input type="text" class="form-control" v-model="sms_code"&gt;</span><br><span class="line">              &lt;/div&gt; --&gt;</span></span><br><span class="line">              <span class="tag">&lt;<span class="name">button</span> <span class="attr">v-on:click</span>=<span class="string">"register"</span> <span class="attr">class</span>=<span class="string">"btn btn-default"</span>&gt;</span>注册<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="undefined"></span><br><span class="line">  .user-center &#123;</span><br><span class="line">    margin-top: 100px;</span><br><span class="line">  &#125;</span><br><span class="line">  .user-content &#123;</span><br><span class="line">    margin-top: 20px;</span><br><span class="line">  &#125;</span><br><span class="line"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; alert &#125; <span class="keyword">from</span> <span class="string">'vue-strap'</span>  <span class="comment">// 导入vue-strap的alert组件</span></span><br><span class="line"><span class="keyword">import</span> AV <span class="keyword">from</span> <span class="string">'avoscloud-sdk'</span>  <span class="comment">// Leancloud的配置</span></span><br><span class="line">AV.initialize(<span class="string">'****AppID****'</span>, <span class="string">'****AppKey****'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  <span class="comment">// 默认的数据</span></span><br><span class="line">  data: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      username: <span class="string">''</span>,</span><br><span class="line">      password: <span class="string">''</span>,</span><br><span class="line">      registerName: <span class="string">''</span>,</span><br><span class="line">      registerPassword: <span class="string">''</span>,</span><br><span class="line">      registerRePassword: <span class="string">''</span>,</span><br><span class="line">      showError: <span class="literal">false</span>,</span><br><span class="line">      errorMsg: <span class="string">'default error'</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  components: &#123;</span><br><span class="line">    alert</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    <span class="comment">// 登录</span></span><br><span class="line">    login: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="comment">// 由于在Leancloud的login方法中不能直接使用this.数据，需要提前申请</span></span><br><span class="line">      <span class="keyword">var</span> data = <span class="keyword">this</span>.$data</span><br><span class="line">      <span class="keyword">var</span> router = <span class="keyword">this</span>.$route.router</span><br><span class="line">      AV.User.logIn(<span class="keyword">this</span>.username, <span class="keyword">this</span>.password).then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="comment">// 路由跳转</span></span><br><span class="line">        router.go(&#123;path: <span class="string">'/'</span>&#125;)</span><br><span class="line">      &#125;, <span class="function"><span class="keyword">function</span> (<span class="params">error</span>) </span>&#123;</span><br><span class="line">        <span class="comment">// 用户登录报错，显示报错信息</span></span><br><span class="line">        data.showError = <span class="literal">true</span></span><br><span class="line">        data.errorMsg = error.message</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 注册</span></span><br><span class="line">    register: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      <span class="keyword">var</span> data = <span class="keyword">this</span>.$data</span><br><span class="line">      <span class="comment">// 注册验证，输入两次密码确定相同才提交</span></span><br><span class="line">      <span class="keyword">if</span> (<span class="keyword">this</span>.registerPassword === <span class="keyword">this</span>.registerRePassword) &#123;</span><br><span class="line">        <span class="keyword">const</span> user = <span class="keyword">new</span> AV.User()</span><br><span class="line">        user.set(<span class="string">'username'</span>, <span class="keyword">this</span>.registerName)</span><br><span class="line">        user.set(<span class="string">'password'</span>, <span class="keyword">this</span>.registerPassword)</span><br><span class="line">        <span class="comment">// 注册</span></span><br><span class="line">        user.signUp().then(user =&gt; &#123;</span><br><span class="line">          data.showError = <span class="literal">true</span></span><br><span class="line">          data.errorMsg = <span class="string">'注册成功'</span></span><br><span class="line">        &#125;, error =&gt; &#123;</span><br><span class="line">          data.showError = <span class="literal">true</span></span><br><span class="line">          data.errorMsg = error.message</span><br><span class="line">        &#125;)</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        data.showError = <span class="literal">true</span></span><br><span class="line">        data.errorMsg = <span class="string">'请输入相同密码'</span></span><br><span class="line">      &#125;</span><br><span class="line">      <span class="comment">// 校验验证码</span></span><br><span class="line">      <span class="comment">// AV.Cloud.verifySmsCode(this.sms_code, this.mobile)</span></span><br><span class="line">      <span class="comment">// .then(() =&gt; &#123;</span></span><br><span class="line">      <span class="comment">// &#125;, error =&gt; &#123;</span></span><br><span class="line">      <span class="comment">//   console.log(error)</span></span><br><span class="line">      <span class="comment">// &#125;)</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="comment">// 发送手机验证码</span></span><br><span class="line">    sendSmsCode: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      AV.Cloud.requestSmsCode(&#123;</span><br><span class="line">        mobilePhoneNumber: <span class="keyword">this</span>.mobile</span><br><span class="line">      &#125;).then(() =&gt; &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'发送成功'</span>)</span><br><span class="line">      &#125;, error =&gt; &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(error)</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="用户退出"><a href="#用户退出" class="headerlink" title="用户退出"></a>用户退出</h1><p>用户退出需要执行Leancloud的退出方法</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> AV <span class="keyword">from</span> <span class="string">'avoscloud-sdk'</span></span><br><span class="line">AV.initialize(<span class="string">'****AppID****'</span>, <span class="string">'****AppKey****'</span>)</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  data: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      username: AV.User.current().get(<span class="string">'username'</span>)  <span class="comment">// 获取当前登录用户的用户名</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  ready () &#123;</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    <span class="string">'logout'</span>: <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">      AV.User.logOut()  <span class="comment">// 退出当前登录用户</span></span><br><span class="line">      <span class="keyword">this</span>.$route.router.go(&#123;path: <span class="string">'/login'</span>&#125;)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/10/vue-webpack-init-2/" rel="next" title="Vue+webpack+leancloud基础教程（二）">
+                <i class="fa fa-chevron-left"></i> Vue+webpack+leancloud基础教程（二）
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/04/mongodb-basic/" rel="prev" title="Mongodb基础教程">
+                Mongodb基础教程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/05/19/vue-webpack-leancloud-login/"
+           data-title="Vue+webpack+leancloud基础教程（三）-用户的登录、注册" data-url="http://chicheng.info/2016/05/19/vue-webpack-leancloud-login/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/avatar.jpg"
+               alt="Chicheng" />
+          <p class="site-author-name" itemprop="name">Chicheng</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Leancloud"><span class="nav-number">2.</span> <span class="nav-text">Leancloud</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Leancloud入门"><span class="nav-number">2.1.</span> <span class="nav-text">Leancloud入门</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装Leancloud-SDK"><span class="nav-number">2.2.</span> <span class="nav-text">安装Leancloud SDK</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#vue-strap"><span class="nav-number">3.</span> <span class="nav-text">vue-strap</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介-1"><span class="nav-number">3.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">3.2.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">3.3.</span> <span class="nav-text">使用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#用户注册、登录"><span class="nav-number">4.</span> <span class="nav-text">用户注册、登录</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#页面设计"><span class="nav-number">4.1.</span> <span class="nav-text">页面设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#方法"><span class="nav-number">4.2.</span> <span class="nav-text">方法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#用户退出"><span class="nav-number">5.</span> <span class="nav-text">用户退出</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chicheng</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"starier"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

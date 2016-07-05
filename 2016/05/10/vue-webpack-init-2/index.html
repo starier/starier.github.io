@@ -1,0 +1,639 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css"/>
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="vue,vue-strap,vue-router,webpack,bootstrap,leancloud," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="简介在上一教程中，主要介绍了Vue项目的页面构建，即组件设计，在本教程中，主要讲解了Vue项目的路由设计及配置开发，包括路由基础配置、子路由管理等内容。
+前提条件在Vue项目中，尤其是单页应用，路由功能主要由vue-router完成，官方中文API，项目使用vue路由之前，需要安装相应插件，执行以下命令
+
+npm install –save-dev vue-router
+
+同时，项目中也用到了vu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue+webpack+leancloud基础教程（二）">
+<meta property="og:url" content="http://chicheng.info/2016/05/10/vue-webpack-init-2/index.html">
+<meta property="og:site_name" content="Chicheng's Blog">
+<meta property="og:description" content="简介在上一教程中，主要介绍了Vue项目的页面构建，即组件设计，在本教程中，主要讲解了Vue项目的路由设计及配置开发，包括路由基础配置、子路由管理等内容。
+前提条件在Vue项目中，尤其是单页应用，路由功能主要由vue-router完成，官方中文API，项目使用vue路由之前，需要安装相应插件，执行以下命令
+
+npm install –save-dev vue-router
+
+同时，项目中也用到了vu">
+<meta property="og:updated_time" content="2016-05-19T06:55:16.878Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vue+webpack+leancloud基础教程（二）">
+<meta name="twitter:description" content="简介在上一教程中，主要介绍了Vue项目的页面构建，即组件设计，在本教程中，主要讲解了Vue项目的路由设计及配置开发，包括路由基础配置、子路由管理等内容。
+前提条件在Vue项目中，尤其是单页应用，路由功能主要由vue-router完成，官方中文API，项目使用vue路由之前，需要安装相应插件，执行以下命令
+
+npm install –save-dev vue-router
+
+同时，项目中也用到了vu">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> Vue+webpack+leancloud基础教程（二） | Chicheng's Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?6c68b31c5fe2e25af9b2f230a597b923";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Chicheng's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-home fa-fw"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-user fa-fw"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-archive fa-fw"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-tags fa-fw"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Vue+webpack+leancloud基础教程（二）
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-10T16:51:33+08:00" content="2016-05-10">
+              2016-05-10
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/10/vue-webpack-init-2/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/10/vue-webpack-init-2/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>在上一教程中，主要介绍了Vue项目的页面构建，即组件设计，在本教程中，主要讲解了Vue项目的路由设计及配置开发，包括路由基础配置、子路由管理等内容。</p>
+<h1 id="前提条件"><a href="#前提条件" class="headerlink" title="前提条件"></a>前提条件</h1><p>在Vue项目中，尤其是单页应用，路由功能主要由vue-router完成，<a href="http://router.vuejs.org/zh-cn/index.html" target="_blank" rel="external">官方中文API</a>，项目使用vue路由之前，需要安装相应插件，执行以下命令</p>
+<blockquote>
+<p>npm install –save-dev vue-router</p>
+</blockquote>
+<p>同时，项目中也用到了<a href="http://yuche.github.io/vue-strap/#accordion" target="_blank" rel="external">vue-strap</a>，用来实现vue中的bootstrap效果，还有<a href="https://leancloud.cn/" target="_blank" rel="external">leancloud</a>，用户实现系统的后台接口，如用户的注册、登录等功能</p>
+<h1 id="基础配置"><a href="#基础配置" class="headerlink" title="基础配置"></a>基础配置</h1><p>项目的入口文件<strong>main.js</strong>需要针对vue-router进行配置，将路由的配置到routers.js文件下，如下</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span></span><br><span class="line"><span class="keyword">import</span> App <span class="keyword">from</span> <span class="string">'./App'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 路由配置文件</span></span><br><span class="line"><span class="keyword">import</span> routerMap <span class="keyword">from</span> <span class="string">'./routers'</span></span><br><span class="line"><span class="keyword">import</span> VueRouter <span class="keyword">from</span> <span class="string">'vue-router'</span></span><br><span class="line">Vue.use(VueRouter)</span><br><span class="line"><span class="comment">// 配置路由</span></span><br><span class="line"><span class="keyword">var</span> vueRouter = <span class="keyword">new</span> VueRouter()</span><br><span class="line">routerMap(vueRouter)</span><br><span class="line">vueRouter.start(App, <span class="string">'#app'</span>)</span><br></pre></td></tr></table></figure>
+<p>针对该系统的路由配置，包括左侧菜单栏路由和菜单栏子路两种配置</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">'use strict'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// leancloud的配置文件，用来控制路由的权限管理，例如控制未登录用户无法访问的页面等操作</span></span><br><span class="line"><span class="keyword">import</span> AV <span class="keyword">from</span> <span class="string">'avoscloud-sdk'</span></span><br><span class="line">AV.initialize(<span class="string">'****appid*****'</span>, <span class="string">'****appkey*****'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="function"><span class="keyword">function</span> (<span class="params">vueRouter</span>) </span>&#123;</span><br><span class="line">  vueRouter.map(&#123;</span><br><span class="line">    <span class="string">'/'</span>: &#123;</span><br><span class="line">      name: <span class="string">'home'</span>,</span><br><span class="line">      component: <span class="built_in">require</span>(<span class="string">'./Dashboard'</span>),</span><br><span class="line">      subRoutes: &#123;</span><br><span class="line">        <span class="string">'/manager'</span>: &#123;</span><br><span class="line">          component: <span class="built_in">require</span>(<span class="string">'./views/Manager'</span>),</span><br><span class="line">          auth: <span class="literal">true</span>,  <span class="comment">// 此标识用来确认该页面需要登录状态下才能访问</span></span><br><span class="line">          subRoutes: &#123;</span><br><span class="line">            <span class="string">'/app'</span>: &#123;</span><br><span class="line">              component: <span class="built_in">require</span>(<span class="string">'./views/manager/App'</span>)</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="string">'/basic'</span>: &#123;</span><br><span class="line">              component: <span class="built_in">require</span>(<span class="string">'./views/manager/Basic'</span>)</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="string">'/server'</span>: &#123;</span><br><span class="line">              component: <span class="built_in">require</span>(<span class="string">'./views/manager/Server'</span>)</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">'/login'</span>: &#123;  <span class="comment">// 登录页面</span></span><br><span class="line">      component: <span class="built_in">require</span>(<span class="string">'./Login'</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">  vueRouter.redirect(&#123;</span><br><span class="line">    <span class="string">'/'</span>: <span class="string">'/manager'</span>,  <span class="comment">// 路由自动跳转页面</span></span><br><span class="line">    <span class="string">'/manager'</span>: <span class="string">'/manager/app'</span></span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="comment">// 验证当前页面是否可被用户访问，如果无权限，则跳转登录页面</span></span><br><span class="line">  vueRouter.beforeEach(<span class="function"><span class="keyword">function</span> (<span class="params">transition</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (transition.to.auth === <span class="literal">true</span>) &#123;</span><br><span class="line">      <span class="keyword">var</span> currentUser = AV.User.current()</span><br><span class="line">      <span class="keyword">if</span> (currentUser) &#123;</span><br><span class="line">        transition.next()</span><br><span class="line">      &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        vueRouter.go(&#123;path: <span class="string">'/login'</span>&#125;)  <span class="comment">// 用户未登录状态</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      transition.next()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="路由组件"><a href="#路由组件" class="headerlink" title="路由组件"></a>路由组件</h1><p>系统管理对应的组件为Manager.vue，其中tab页根据bootstrap样式设计，并匹配vue数据</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"container-fluid manager-tab"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">ul</span> <span class="attr">class</span>=<span class="string">"nav nav-tabs"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">li</span> <span class="attr">v-bind:class</span>=<span class="string">"submenu.class"</span> <span class="attr">role</span>=<span class="string">"presentation"</span> <span class="attr">v-for</span>=<span class="string">"submenu in submenus"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">a</span> <span class="attr">v-link</span>=<span class="string">"submenu.href"</span> <span class="attr">data-toggle</span>=<span class="string">"tab"</span>&gt;</span>&#123;&#123;submenu.name&#125;&#125;<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">router-view</span>&gt;</span><span class="tag">&lt;/<span class="name">router-view</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="undefined"></span><br><span class="line">  export default &#123;</span><br><span class="line">    data () &#123;</span><br><span class="line">      return &#123;</span><br><span class="line">        submenus: [</span><br><span class="line">          &#123;</span><br><span class="line">            class: 'active',</span><br><span class="line">            name: '应用配置',</span><br><span class="line">            href: '/manager/app'</span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            class: '',</span><br><span class="line">            name: '服务器管理',</span><br><span class="line">            href: '/manager/server'</span><br><span class="line">          &#125;,</span><br><span class="line">          &#123;</span><br><span class="line">            class: '',</span><br><span class="line">            name: '基础信息',</span><br><span class="line">            href: '/manager/basic'</span><br><span class="line">          &#125;</span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="undefined"></span><br><span class="line">  div.manager-tab &#123;</span><br><span class="line">    margin-top: 10px;</span><br><span class="line">  &#125;</span><br><span class="line"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>Manager下有三个自组件，其中应用配置组件内容如下</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">template</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"jumbotron"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>应用配置<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">template</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="undefined"></span><br><span class="line">  div.jumbotron &#123;</span><br><span class="line">    margin-top: 20px;</span><br><span class="line">  &#125;</span><br><span class="line"></span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="后续"><a href="#后续" class="headerlink" title="后续"></a>后续</h1><p>在前两章教程中，针对vue样式和路由功能已基本实现，后续会针对leancloud实现登录注册功能。</p>
+
+      
+    </div>
+    
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/vue/" rel="tag">#vue</a>
+          
+            <a href="/tags/vue-strap/" rel="tag">#vue-strap</a>
+          
+            <a href="/tags/vue-router/" rel="tag">#vue-router</a>
+          
+            <a href="/tags/webpack/" rel="tag">#webpack</a>
+          
+            <a href="/tags/bootstrap/" rel="tag">#bootstrap</a>
+          
+            <a href="/tags/leancloud/" rel="tag">#leancloud</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/09/vue-webpack-init/" rel="next" title="Vue+webpack+leancloud基础教程（一）">
+                <i class="fa fa-chevron-left"></i> Vue+webpack+leancloud基础教程（一）
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/19/vue-webpack-leancloud-login/" rel="prev" title="Vue+webpack+leancloud基础教程（三）-用户的登录、注册">
+                Vue+webpack+leancloud基础教程（三）-用户的登录、注册 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/05/10/vue-webpack-init-2/"
+           data-title="Vue+webpack+leancloud基础教程（二）" data-url="http://chicheng.info/2016/05/10/vue-webpack-init-2/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/avatar.jpg"
+               alt="Chicheng" />
+          <p class="site-author-name" itemprop="name">Chicheng</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">7</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#前提条件"><span class="nav-number">2.</span> <span class="nav-text">前提条件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基础配置"><span class="nav-number">3.</span> <span class="nav-text">基础配置</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#路由组件"><span class="nav-number">4.</span> <span class="nav-text">路由组件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#后续"><span class="nav-number">5.</span> <span class="nav-text">后续</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Chicheng</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="http://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"starier"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>
