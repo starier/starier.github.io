@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://chicheng.info/2016/08/11/java-websocket/</loc>
+    
+    <lastmod>2016-08-11T07:58:33.157Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://chicheng.info/2016/07/05/spring-boot-mongodb-webservice/</loc>
     
     <lastmod>2016-07-05T03:28:15.476Z</lastmod>
